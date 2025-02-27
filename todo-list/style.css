@@ -45,3 +45,19 @@ h1 {
   flex-direction: column;
   gap: 0.625rem;
 }
+
+#todo-input{
+  box-sizing: border-box;
+  padding: 0.75rem 1.25rem;
+  width: 100%;
+  background: none;
+  border: 2px solid var(--secondary-color);
+  border-radius: 1000px;
+  font: inherit;
+  color: var(--text-color);
+  caret-color: var(--accent-color);
+}
+
+#todo-input:focus{
+  outline:none;
+}
