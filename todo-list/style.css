@@ -1,3 +1,4 @@
+/* I added variables to be used throught the css styling to reduce code complexity */
 :root{
   --background: #101114;
   --primary-color: #1C1D20;
@@ -13,15 +14,34 @@
 
 html{
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 16pt;
+  font-size: 16px; /* I set the font size in the html section to use rems in the other areas */
   color: var(--text-color);
 }
 
 body{
+  font-size: 1rem; /* 1rem is equal to 16px */
   min-height: 100vh;
-  padding: 10px;
+  padding: 0.625rem;
   background-color: var(--background);
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+h1 {
+  margin-top: 6.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 3rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--accent-color);
+}
+
+.wrapper{
+  max-width: 43.5rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
 }
