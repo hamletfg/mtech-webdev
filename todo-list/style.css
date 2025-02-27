@@ -80,3 +80,9 @@ form{
   display:flex;
   align-items: center;
 }
+
+.todo .todo-text{
+  padding: 15px; /* Make padding larger here so the clickable area is bigger */
+  padding-right: 0;
+  flex-grow: 1;
+}
