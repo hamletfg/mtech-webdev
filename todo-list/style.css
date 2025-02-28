@@ -111,6 +111,7 @@ form{
   fill: transparent;
 }
 
+/* style the checkbox */
 .custom-checkbox{
   border: 2px solid var(--accent-color);
   border-radius: 50%;
@@ -122,11 +123,26 @@ form{
   flex-shrink: 0;
 }
 
-/* Fill checkbox accent color when clicking and show checkbox */
+/* fill checkbox accent color when clicking and show checkbox */
 input[type="checkbox"]:checked + .custom-checkbox {
   background-color: var(--accent-color);
 }
 
 input[type="checkbox"]:checked + .custom-checkbox svg{
   fill: var(--primary-color);
+}
+
+/* style the text to show when a task is completed */
+input[type="checkbox"]:checked ~ .todo-text{
+  text-decoration: line-through;
+  color: var(--secondary-color);
+}
+
+input[type="checkbox"]{
+  clip-path: inset(100%);
+  overflow: hidden;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  white-space: nowrap;
 }
