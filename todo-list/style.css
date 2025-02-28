@@ -86,3 +86,13 @@ form{
   padding-right: 0;
   flex-grow: 1;
 }
+
+.delete-button {
+  padding: 3px;
+  background: none;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
