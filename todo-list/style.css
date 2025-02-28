@@ -96,3 +96,11 @@ form{
   align-items: center;
   cursor: pointer;
 }
+
+.delete-button svg{
+  transition: 200ms ease;
+}
+
+.delete-button:hover svg{
+  fill: #ff0033;
+}
