@@ -121,6 +121,8 @@ form{
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
+  transition: 200ms ease;
+  cursor: pointer;
 }
 
 /* fill checkbox accent color when clicking and show checkbox */
@@ -138,6 +140,7 @@ input[type="checkbox"]:checked ~ .todo-text{
   color: var(--secondary-color);
 }
 
+/* Checkbox hidden using recommended format for accessibility */
 input[type="checkbox"]{
   clip-path: inset(100%);
   overflow: hidden;
