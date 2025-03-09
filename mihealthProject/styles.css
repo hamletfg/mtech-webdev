@@ -1,0 +1,49 @@
+*,
+*::before,
+*::after {
+  border: solid black 1px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #ddd;
+}
+
+.header__logo a {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  position: relative;
+}
+
+.header__logo .mi {
+  color: #e53935;
+}
+
+.header__logo .health {
+  color: #7cb342;
+}
+
+.header__nav-links ul {
+  display: flex;
+  list-style: none;
+  gap: 1.875rem;
+}
+
+.header__nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+}
