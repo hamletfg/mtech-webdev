@@ -89,4 +89,16 @@ nav {
 
 /* Right side with food cards */
 .hero__cards {
+  flex: 2;
+  display: flex;
+  gap: 1rem;
+}
+
+/* Individual meal cards */
+.meal-card {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  border-radius: 0.25rem;
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
 }
