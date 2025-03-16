@@ -119,3 +119,20 @@ nav {
   font-weight: bold;
   font-size: 0.875rem;
 }
+
+.meal-btn {
+  position: absolute;
+  bottom: 2rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  color: white;
+  font-weight: bold;
+  background-color: #7cb342;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.meal-btn:hover {
+  background-color: #689f38;
+}
