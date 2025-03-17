@@ -10,6 +10,8 @@
 body {
   font-family: Arial, sans-serif;
   line-height: 1.6;
+  background-image: url("moroccan-flower.png");
+  background-repeat: repeat;
 }
 
 nav {
