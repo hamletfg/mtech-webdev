@@ -9,8 +9,10 @@ export default function PokemonSearchList({ initialPokemons }) {
     setSearchTerm(event.target.value);
   };
 
-  // Filtering logic will go here soon
-  const filteredPokemons = initialPokemons; // Placeholder
+  // Filtering the pokemon based on the search term (case-insensitive)
+  const filteredPokemons = initialPokemons.filter((pokemon) =>
+    pokemon.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div>
@@ -24,16 +26,21 @@ export default function PokemonSearchList({ initialPokemons }) {
         // Added w-full and max-w-xs for better width control
       />
 
-      {/* We might style the list later too, e.g., with list-disc ml-5 */}
-      <ul>
-        {filteredPokemons.map((pokemon) => (
-          <li key={pokemon.name} className="mb-1">
-            {" "}
-            {/* Basic margin between list items */}
-            {pokemon.name}
-          </li>
-        ))}
-      </ul>
+      {filteredPokemons.length > 0 ? (
+        // If TRUE (length > 0), render the list:
+        <ul>
+          {filteredPokemons.map((pokemon) => (
+            <li key={pokemon.name} className="mb-1">
+              {pokemon.name}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        // If FALSE (length is 0), render the message:
+        <p className="text-gray-500 italic mt-4">
+          No Pokémon found matching your search.
+        </p>
+      )}
     </div>
   );
 }
