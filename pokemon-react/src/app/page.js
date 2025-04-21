@@ -35,7 +35,7 @@ export default async function Page() {
   return (
     <main className="p-8">
       <h1 className="text-3xl font-bold mb-4">My Pokédex</h1>
-      <PokemonSearchList initialPokemons={pokemons} />
+      <PokemonSearchList initialPokemons={formattedPokemons} />
     </main>
   );
 }

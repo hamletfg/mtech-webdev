@@ -1,46 +1,62 @@
-"use client";
+"use client"; // Needed for useState if/when we add search functionality
 
-import { useState } from "react";
+import Image from "next/image"; // Import the optimized Image component
+import { useState } from "react"; // Import useState for future search functionality
 
 export default function PokemonSearchList({ initialPokemons }) {
+  // --- State for Search (we'll implement the filtering logic later) ---
   const [searchTerm, setSearchTerm] = useState("");
 
-  const handleInputChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
-  // Filtering the pokemon based on the search term (case-insensitive)
+  // --- Filtering Logic (placeholder for now, just uses initial list) ---
+  // In a future step, we'll filter initialPokemons based on searchTerm
   const filteredPokemons = initialPokemons.filter((pokemon) =>
     pokemon.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div>
+      {/* --- Search Input --- */}
       <input
         type="text"
-        placeholder="Search Pokémon..."
         value={searchTerm}
-        onChange={handleInputChange}
-        // Replace inline style with Tailwind className
-        className="mb-4 p-2 border border-gray-300 rounded w-full max-w-xs" // <-- Tailwind classes
-        // Added w-full and max-w-xs for better width control
+        onChange={(e) => setSearchTerm(e.target.value)}
+        placeholder="Search Pokémon..."
+        className="mb-4 p-2 border rounded w-full text-black bg-white" // Added text-black and bg-white for visibility
       />
 
-      {filteredPokemons.length > 0 ? (
-        // If TRUE (length > 0), render the list:
-        <ul>
-          {filteredPokemons.map((pokemon) => (
-            <li key={pokemon.id} className="mb-1">
-              {"#${pokemon.id} ${pokemon.name}"}
+      {/* --- Pokémon List --- */}
+      <ul className="space-y-2">
+        {" "}
+        {/* Add some space between list items */}
+        {filteredPokemons.map((pokemon) => {
+          // Construct the image URL using the Pokémon's ID
+          const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`;
+
+          return (
+            <li
+              key={pokemon.id}
+              className="flex items-center p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" // Basic styling and hover effect
+            >
+              {/* --- Pokémon Image --- */}
+              <Image
+                src={imageUrl}
+                alt={pokemon.name} // Important for accessibility
+                width={56} // Specify width (e.g., 56px)
+                height={56} // Specify height (e.g., 56px)
+                className="mr-4" // Add margin to the right of the image
+                unoptimized // Optional: If you have issues with external domains or want raw images
+              />
+
+              {/* --- Pokémon Name --- */}
+              <span className="capitalize text-lg">
+                {" "}
+                {/* Capitalize the first letter and make text larger */}
+                {pokemon.name}
+              </span>
             </li>
-          ))}
-        </ul>
-      ) : (
-        // If FALSE (length is 0), render the message:
-        <p className="text-gray-500 italic mt-4">
-          No Pokémon found matching your search.
-        </p>
-      )}
+          );
+        })}
+      </ul>
     </div>
   );
 }
