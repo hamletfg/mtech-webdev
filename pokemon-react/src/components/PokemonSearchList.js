@@ -30,8 +30,8 @@ export default function PokemonSearchList({ initialPokemons }) {
         // If TRUE (length > 0), render the list:
         <ul>
           {filteredPokemons.map((pokemon) => (
-            <li key={pokemon.name} className="mb-1">
-              {pokemon.name}
+            <li key={pokemon.id} className="mb-1">
+              {"#${pokemon.id} ${pokemon.name}"}
             </li>
           ))}
         </ul>
