@@ -13,7 +13,24 @@ export default async function Page() {
   }
 
   const data = await response.json();
-  const pokemons = data.results;
+  const rawPokemons = data.results; // Rename to map out and get ID
+
+  // --- Transformation Step ---
+  const formattedPokemons = rawPokemons.map((pokemon) => {
+    // 1. Get the URL: e.g., "https://pokeapi.co/api/v2/pokemon/1/"
+    const url = pokemon.url;
+    // 2. Split by '/': ["https:", "", "pokeapi.co", ..., "1", ""]
+    const parts = url.split("/");
+    // 3. Get the ID (index 6): "1"
+    const id = parts[6];
+
+    // 4. Return a new object with the desired shape
+    return {
+      id: id, // Add the extracted ID
+      name: pokemon.name, // Keep the original name
+    };
+  });
+  // Now formattedPokemons is an array like: [{ id: '1', name: 'bulbasaur' }, { id: '2', name: 'ivysaur' }, ...]
 
   return (
     <main className="p-8">
