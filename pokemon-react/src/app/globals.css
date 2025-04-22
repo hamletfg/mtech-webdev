@@ -24,3 +24,105 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Pokemon Type Colors */
+.type-normal {
+  background-color: #a8a77a;
+  color: white;
+}
+.type-fire {
+  background-color: #ee8130;
+  color: white;
+}
+.type-water {
+  background-color: #6390f0;
+  color: white;
+}
+.type-electric {
+  background-color: #f7d02c;
+  color: #222;
+} /* Dark text for light background */
+.type-grass {
+  background-color: #7ac74c;
+  color: white;
+}
+.type-ice {
+  background-color: #96d9d6;
+  color: #222;
+} /* Dark text for light background */
+.type-fighting {
+  background-color: #c22e28;
+  color: white;
+}
+.type-poison {
+  background-color: #a33ea1;
+  color: white;
+}
+.type-ground {
+  background-color: #e2bf65;
+  color: #222;
+} /* Dark text for light background */
+.type-flying {
+  background-color: #a98ff3;
+  color: white;
+}
+.type-psychic {
+  background-color: #f95587;
+  color: white;
+}
+.type-bug {
+  background-color: #a6b91a;
+  color: white;
+}
+.type-rock {
+  background-color: #b6a136;
+  color: white;
+}
+.type-ghost {
+  background-color: #735797;
+  color: white;
+}
+.type-dragon {
+  background-color: #6f35fc;
+  color: white;
+}
+.type-dark {
+  background-color: #705746;
+  color: white;
+}
+.type-steel {
+  background-color: #b7b7ce;
+  color: #222;
+} /* Dark text for light background */
+.type-fairy {
+  background-color: #d685ad;
+  color: white;
+}
+
+/* Ensure sufficient contrast for text */
+.type-normal,
+.type-fire,
+.type-water,
+.type-grass,
+.type-fighting,
+.type-poison,
+.type-flying,
+.type-psychic,
+.type-bug,
+.type-rock,
+.type-ghost,
+.type-dragon,
+.type-dark,
+.type-fairy {
+  color: white; /* Default to white text */
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4); /* Optional: subtle shadow for better readability */
+}
+
+/* Override for light backgrounds */
+.type-electric,
+.type-ice,
+.type-ground,
+.type-steel {
+  color: #222; /* Use dark text */
+  text-shadow: none;
+}

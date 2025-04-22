@@ -1,5 +1,14 @@
 import Image from "next/image";
 import Link from "next/link"; // Correctly imported
+// --- Import Icons ---
+import {
+  FaHeart, // For HP
+  FaFistRaised, // For Attack
+  FaShieldAlt, // For Defense
+  FaBolt, // For Special Attack
+  FaShieldVirus, // For Special Defense
+  FaRunning, // For Speed
+} from "react-icons/fa";
 
 function formatStatName(name) {
   switch (name) {
@@ -19,6 +28,11 @@ function formatStatName(name) {
       return name.charAt(0).toUpperCase() + name.slice(1);
   }
 }
+
+// --- Helper function/Map to get Stat Icons ---
+const statIcons = {
+  hp: <FaHeart className='inline mr-1 text-red-500' />,
+};
 
 // -- The Page Component ---
 export default async function PokemonDetailPage({ params }) {
@@ -109,9 +123,6 @@ export default async function PokemonDetailPage({ params }) {
             </span>
           ))}
         </div>
-        <style jsx global>{`
-          /* Styles are fine */
-        `}</style>
       </div>
 
       {/* Stats Section */}
