@@ -1,7 +1,16 @@
 import PokemonSearchList from "@/components/PokemonSearchList";
+import PaginationControls from "@/components/PaginationControls";
 
-export default async function Page() {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=20");
+export default async function Page({ searchParams }) {
+  // --- Pagination Logic ---
+  const page = parseInt(searchParams?.page || "1"); // Get page from URL, default to 1
+  const limit = 20; // Limit Pokémon to 20 per page
+  const offset = (paga - 1) * limit; // Calculate offset for API
+
+  // --- Fetch Data ---
+  const response = await fetch(
+    `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`
+  );
 
   if (!response.ok) {
     console.error("Failed to fetch Pokémon");
@@ -14,6 +23,11 @@ export default async function Page() {
 
   const data = await response.json();
   const rawPokemons = data.results; // Rename to map out and get ID
+  const totalPokemon = data.count; // Get total count for pagination logic
+
+  // Determine if there are next/previous pages
+  const hasNextPage = offset + limit < totalPokemon;
+  const hasPrevPage = page > 1;
 
   // --- Transformation Step ---
   const formattedPokemons = rawPokemons.map((pokemon) => {
@@ -32,10 +46,20 @@ export default async function Page() {
   });
   // Now formattedPokemons is an array like: [{ id: '1', name: 'bulbasaur' }, { id: '2', name: 'ivysaur' }, ...]
 
+  // --- Render Page ---
   return (
     <main className='p-8'>
-      <h1 className='text-3xl font-bold mb-4'>My Pokédex</h1>
+      <h1 className='text-3xl font-bold mb-4'>My Pokédex (Page {page})</h1>
+
+      {/* Pass the fetched Pokémon for the current page */}
       <PokemonSearchList initialPokemons={formattedPokemons} />
+
+      {/* --- Add Pagination Controls --- */}
+      <PaginationControls
+        currentPage={page}
+        hasNextPage={hasNextPage}
+        hasPrevPage={hasPrevPage}
+      />
     </main>
   );
 }
