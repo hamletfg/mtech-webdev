@@ -57,6 +57,15 @@ export default async function PokemonDetailPage({ params }) {
     );
   }
 
+  // --- Render Loading State
+  if (!pokemonData) {
+    return (
+      <main className='p-8 text-center'>
+        <p>Loading Pokémon details...</p>
+      </main>
+    );
+  }
+
   // For now, just display the Id to confirm it works
   return (
     <main>
