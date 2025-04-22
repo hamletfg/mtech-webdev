@@ -1,8 +1,7 @@
 import Image from "next/image";
-import Link from "next/link"; // For a back button
+import Link from "next/link"; // Correctly imported
 
-// --- Helper function to format stat names ---
-function formatStateName(name) {
+function formatStatName(name) {
   switch (name) {
     case "hp":
       return "HP";
@@ -17,16 +16,15 @@ function formatStateName(name) {
     case "speed":
       return "Speed";
     default:
-      return name.charAt(0).toUpperCase() + name.slice(1); // Capitalize other stats
+      return name.charAt(0).toUpperCase() + name.slice(1);
   }
 }
 
 // -- The Page Component ---
 export default async function PokemonDetailPage({ params }) {
-  // For a route like /pokemon/25, params will be { id: '25' }
   const id = params.id;
   const POKEMON_API_URL = `https://pokeapi.co/api/v2/pokemon/${id}`;
-  const MAX_STAT_VALUE = 180; // Define max for bar calculation
+  const MAX_STAT_VALUE = 180;
 
   let pokemonData = null;
   let error = null;
@@ -34,8 +32,9 @@ export default async function PokemonDetailPage({ params }) {
   try {
     const response = await fetch(POKEMON_API_URL);
     if (!response.ok) {
+      // Corrected template literal usage in error message
       throw new Error(
-        "Failed to fetch Pokémon with ID ${id}. Status: ${response.status}"
+        `Failed to fetch Pokémon with ID ${id}. Status: ${response.status}`
       );
     }
     pokemonData = await response.json();
@@ -50,15 +49,17 @@ export default async function PokemonDetailPage({ params }) {
       <main className='p-8 text-center'>
         <h1 className='text-2xl font-bold text-red-600 mb-4'>Error</h1>
         <p className='mb-4'>{error}</p>
-        <link href='/' className='text-blue-500 hover:underline'>
+        {/* CORRECTED: Use the imported Link component */}
+        <Link href='/' className='text-blue-500 hover:underline'>
           Back to Pokédex
-        </link>
+        </Link>
       </main>
     );
   }
 
-  // --- Render Loading State
+  // --- Render Loading State ---
   if (!pokemonData) {
+    // ... (loading state code is fine)
     return (
       <main className='p-8 text-center'>
         <p>Loading Pokémon details...</p>
@@ -66,12 +67,85 @@ export default async function PokemonDetailPage({ params }) {
     );
   }
 
-  // For now, just display the Id to confirm it works
+  // --- Extract Data for Render ---
+  const name = pokemonData.name;
+  const imageUrl = pokemonData.sprites?.front_default || "/placeholder.png";
+  const stats = pokemonData.stats;
+  const types = pokemonData.types;
+
+  // --- Render Success State ---
   return (
-    <main>
-      <h1 className='text-2xl font-bold'>Pokémon Detail Page</h1>
-      <p className='mt-4'>Details for Pokémon ID: {id}</p>
-      {/* We will fetch and display actual data here later */}
+    <main className='p-8 max-w-2xl mx-auto'>
+      {/* Back Link */}
+      <Link
+        href='/'
+        className='text-blue-500 hover:underline mb-6 inline-block'
+      >
+        &larr; Back to Pokédex
+      </Link>
+
+      {/* ... (rest of the component: name, image, types are fine) ... */}
+      <h1 className='text-4xl font-bold capitalize mb-4 text-center'>{name}</h1>
+      <div className='flex justify-center mb-6'>
+        <Image
+          src={imageUrl}
+          alt={`Image of ${name}`}
+          width={200}
+          height={200}
+          priority
+          unoptimized
+          className='bg-gray-100 dark:bg-gray-700 rounded-lg p-2'
+        />
+      </div>
+      <div className='mb-6 text-center'>
+        <h2 className='text-xl font-semibold mb-2'>Type(s)</h2>
+        <div className='flex justify-center gap-2'>
+          {types.map(({ type }) => (
+            <span
+              key={type.name}
+              className={`px-3 py-1 rounded-full text-sm font-medium capitalize text-white type-${type.name}`}
+            >
+              {type.name}
+            </span>
+          ))}
+        </div>
+        <style jsx global>{`
+          /* Styles are fine */
+        `}</style>
+      </div>
+
+      {/* Stats Section */}
+      <div className='bg-gray-50 dark:bg-gray-800 p-6 rounded-lg shadow-md'>
+        <h2 className='text-2xl font-semibold mb-4'>Base Stats</h2>
+        <ul className='space-y-3'>
+          {stats.map((statInfo) => {
+            const statName = statInfo.stat.name;
+            const baseStat = statInfo.base_stat;
+            const barWidth = Math.min((baseStat / MAX_STAT_VALUE) * 100, 100);
+
+            return (
+              <li
+                key={statName}
+                className='grid grid-cols-4 gap-2 items-center'
+              >
+                <span className='font-medium capitalize col-span-1 text-right pr-2'>
+                  {/* CORRECTED: Call the right helper function name */}
+                  {formatStatName(statName)}:
+                </span>
+                <span className='font-bold col-span-1 text-left pl-1 w-10'>
+                  {baseStat}
+                </span>
+                <div className='col-span-2 bg-gray-300 dark:bg-gray-600 rounded-full h-4 overflow-hidden'>
+                  <div
+                    className='bg-blue-500 h-full'
+                    style={{ width: `${barWidth}%` }}
+                  ></div>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </main>
   );
 }
