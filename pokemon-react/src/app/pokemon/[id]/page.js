@@ -32,6 +32,11 @@ function formatStatName(name) {
 // --- Helper function/Map to get Stat Icons ---
 const statIcons = {
   hp: <FaHeart className='inline mr-1 text-red-500' />,
+  attack: <FaFistRaised className='inline mr-1 text-orange-500' />,
+  defense: <FaShieldAlt className='inline mr-1 text-blue-500' />,
+  "special-attack": <FaBolt className='inline mr-1 text-yellow-500' />,
+  "special-defense": <FaShieldVirus className='inline mr-1 text-green-500' />,
+  speed: <FaRunning className='inline mr-1 text-purple-500' />,
 };
 
 // -- The Page Component ---
@@ -98,7 +103,7 @@ export default async function PokemonDetailPage({ params }) {
         &larr; Back to Pokédex
       </Link>
 
-      {/* ... (rest of the component: name, image, types are fine) ... */}
+      {/* Name, Image, Types */}
       <h1 className='text-4xl font-bold capitalize mb-4 text-center'>{name}</h1>
       <div className='flex justify-center mb-6'>
         <Image
@@ -133,19 +138,26 @@ export default async function PokemonDetailPage({ params }) {
             const statName = statInfo.stat.name;
             const baseStat = statInfo.base_stat;
             const barWidth = Math.min((baseStat / MAX_STAT_VALUE) * 100, 100);
+            // Get the corresponding icon, default to null if not found
+            const IconComponent = statIcons[statName] || null;
 
             return (
               <li
                 key={statName}
                 className='grid grid-cols-4 gap-2 items-center'
               >
-                <span className='font-medium capitalize col-span-1 text-right pr-2'>
-                  {/* CORRECTED: Call the right helper function name */}
-                  {formatStatName(statName)}:
+                {/* --- Stat Name with Icon --- */}
+                <span className='font-medium col-span-1 text-right pr-2 flex items-center justify-end'>
+                  {IconComponent} {/* Render the icon */}
+                  {formatStatName(statName)}: {/* Render the formatted name */}
                 </span>
+
+                {/* Stat Value */}
                 <span className='font-bold col-span-1 text-left pl-1 w-10'>
                   {baseStat}
                 </span>
+
+                {/* Stat Bar */}
                 <div className='col-span-2 bg-gray-300 dark:bg-gray-600 rounded-full h-4 overflow-hidden'>
                   <div
                     className='bg-blue-500 h-full'
