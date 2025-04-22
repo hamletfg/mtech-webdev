@@ -6,7 +6,7 @@ export default async function Page() {
   if (!response.ok) {
     console.error("Failed to fetch Pokémon");
     return (
-      <main className="p-8">
+      <main className='p-8'>
         <p>Error loading Pokémon data!</p>
       </main>
     );
@@ -33,8 +33,8 @@ export default async function Page() {
   // Now formattedPokemons is an array like: [{ id: '1', name: 'bulbasaur' }, { id: '2', name: 'ivysaur' }, ...]
 
   return (
-    <main className="p-8">
-      <h1 className="text-3xl font-bold mb-4">My Pokédex</h1>
+    <main className='p-8'>
+      <h1 className='text-3xl font-bold mb-4'>My Pokédex</h1>
       <PokemonSearchList initialPokemons={formattedPokemons} />
     </main>
   );
