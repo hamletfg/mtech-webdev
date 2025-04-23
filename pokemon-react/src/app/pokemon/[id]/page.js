@@ -41,8 +41,9 @@ const statIcons = {
 
 // -- The Page Component ---
 export default async function PokemonDetailPage({ params }) {
-  const id = params.id;
+  const { id } = await params;
   const POKEMON_API_URL = `https://pokeapi.co/api/v2/pokemon/${id}`;
+  const SPECIES_API_URL = `https://pokeapi.co/api/v2/pokemon-species/${id}`;
   const MAX_STAT_VALUE = 180;
 
   let pokemonData = null;

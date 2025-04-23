@@ -1,11 +1,14 @@
 import PokemonSearchList from "@/components/PokemonSearchList";
 import PaginationControls from "@/components/PaginationControls";
 
+export const dynamic = "force-dynamic";
+
 export default async function Page({ searchParams }) {
+  let { page } = await searchParams;
   // --- Pagination Logic ---
-  const page = parseInt(searchParams?.page || "1"); // Get page from URL, default to 1
+  page = parseInt(page || "1"); // Get page from URL, default to 1
   const limit = 20; // Limit Pokémon to 20 per page
-  const offset = (paga - 1) * limit; // Calculate offset for API
+  const offset = (page - 1) * limit; // Calculate offset for API
 
   // --- Fetch Data ---
   const response = await fetch(
