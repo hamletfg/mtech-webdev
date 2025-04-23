@@ -46,30 +46,47 @@ export default async function PokemonDetailPage({ params }) {
   const SPECIES_API_URL = `https://pokeapi.co/api/v2/pokemon-species/${id}`;
   const MAX_STAT_VALUE = 180;
 
-  let pokemonData = null;
+  let pokemonData = null; // Variable for pokemon data
+  let speciesData = null; // Variable for species data
   let error = null;
 
   try {
-    const response = await fetch(POKEMON_API_URL);
-    if (!response.ok) {
-      // Corrected template literal usage in error message
+    // --- Fetch both endpoints concurrently ---
+    const [pokemonRes, speciesRes] = await Promise.all([
+      fetch(POKEMON_API_URL),
+      fetch(SPECIES_API_URL),
+    ]);
+
+    // Check both responses
+    if (!pokemonRes.ok) {
       throw new Error(
-        `Failed to fetch Pokémon with ID ${id}. Status: ${response.status}`
+        `Failed to fetch Pokémon data. Status: ${pokemonRes.status}`
       );
     }
-    pokemonData = await response.json();
+    if (!speciesRes.ok) {
+      throw new Error(
+        `Failed to fetch Pokémon species data. Status ${speciesRes.status}. Some details might be missing.`
+      );
+    }
+
+    pokemonData = await pokemonRes.json();
+    // Only parse species JSON if the request was successful
+    if (speciesRes.ok) {
+      speciesData = await speciesRes.json();
+    }
   } catch (err) {
     console.error("Error fetching Pokémon details:", err);
+    // Prioritize showing the main error
     error = err.message || "Could not load Pokémon data.";
   }
 
-  // --- Render Error State ---
-  if (error) {
+  // --- Render Error State (if main fetch failed) ---
+  if (error && !pokemonData) {
+    // Only show full error if main data failed
     return (
       <main className='p-8 text-center'>
         <h1 className='text-2xl font-bold text-red-600 mb-4'>Error</h1>
         <p className='mb-4'>{error}</p>
-        {/* CORRECTED: Use the imported Link component */}
         <Link href='/' className='text-blue-500 hover:underline'>
           Back to Pokédex
         </Link>
@@ -79,7 +96,6 @@ export default async function PokemonDetailPage({ params }) {
 
   // --- Render Loading State ---
   if (!pokemonData) {
-    // ... (loading state code is fine)
     return (
       <main className='p-8 text-center'>
         <p>Loading Pokémon details...</p>
@@ -92,43 +108,91 @@ export default async function PokemonDetailPage({ params }) {
   const imageUrl = pokemonData.sprites?.front_default || "/placeholder.png";
   const stats = pokemonData.stats;
   const types = pokemonData.types;
+  const abilities = pokemonData.abilities; // Array: [{ ability: { name: 'overgrow', url: '...' }, is_hidden: false, slot: 1 }, ...]
+  const height = pokemonData.height; // Height in decimetres
+  const weight = pokemonData.weight; // Weight in hectograms
+
+  // --- Extract Flavor Text (find first English entry) ---
+  let flavorText = "No description available."; // Default text
+  if (speciesData?.flavor_text_entries) {
+    const englishEntry = speciesData.flavor_text_entries.find(
+      (entry) => entry.language.name === "en"
+    );
+    if (englishEntry) {
+      // Clean up flavor text (replace newlines, form feeds, etc.)
+      flavorText = englishEntry.flavor_text.replace(/[\n\f]/g, " ");
+    }
+  }
 
   // --- Render Success State ---
   return (
     <main className='p-8 max-w-2xl mx-auto'>
-      {/* Back Link */}
+      {/* Back Link, Name, Image, Types (remain the same) */}
       <Link
         href='/'
         className='text-blue-500 hover:underline mb-6 inline-block'
       >
         &larr; Back to Pokédex
       </Link>
-
-      {/* Name, Image, Types */}
       <h1 className='text-4xl font-bold capitalize mb-4 text-center'>{name}</h1>
       <div className='flex justify-center mb-6'>
         <Image
-          src={imageUrl}
-          alt={`Image of ${name}`}
-          width={200}
-          height={200}
-          priority
-          unoptimized
-          className='bg-gray-100 dark:bg-gray-700 rounded-lg p-2'
+          src={imageUrl} // Pass the calculated imageUrl
+          alt={`Image of ${name}`} // Set alt text using the Pokémon's name
+          width={200} // Specify width
+          height={200} // Specify height
+          priority // Keep priority if it's above the fold
+          unoptimized // Keep if needed for external URLs
+          className='bg-gray-100 dark:bg-gray-700 rounded-lg p-2' // Styling
         />
       </div>
       <div className='mb-6 text-center'>
+        {" "}
+        {/* Types Section */}
         <h2 className='text-xl font-semibold mb-2'>Type(s)</h2>
-        <div className='flex justify-center gap-2'>
-          {types.map(({ type }) => (
-            <span
-              key={type.name}
-              className={`px-3 py-1 rounded-full text-sm font-medium capitalize text-white type-${type.name}`}
-            >
-              {type.name}
-            </span>
-          ))}
+        {/* ... Types rendering ... */}
+      </div>
+
+      {/* --- NEW: Physical Characteristics --- */}
+      <div className='text-center mb-6 grid grid-cols-2 gap-4'>
+        <div>
+          <h2 className='text-xl font-semibold mb-1'>Height</h2>
+          {/* Convert decimetres to meters */}
+          <p>{(height / 10).toFixed(1)} m</p>
         </div>
+        <div>
+          <h2 className='text-xl font-semibold mb-1'>Weight</h2>
+          {/* Convert hectograms to kilograms */}
+          <p>{(weight / 10).toFixed(1)} kg</p>
+        </div>
+      </div>
+
+      {/* --- NEW: Flavor Text / Description --- */}
+      <div className='mb-6 bg-blue-50 dark:bg-blue-900 p-4 rounded-lg shadow'>
+        <h2 className='text-xl font-semibold mb-2 text-blue-800 dark:text-blue-200'>
+          Pokédex Entry
+        </h2>
+        <p className='text-base italic'>{flavorText}</p>
+      </div>
+
+      {/* --- NEW: Abilities Section --- */}
+      <div className='mb-6 bg-green-50 dark:bg-green-900 p-4 rounded-lg shadow'>
+        <h2 className='text-xl font-semibold mb-2 text-green-800 dark:text-green-200'>
+          Abilities
+        </h2>
+        <ul className='list-disc list-inside'>
+          {abilities.map(({ ability, is_hidden }) => (
+            <li key={ability.name} className='capitalize'>
+              {ability.name.replace("-", " ")}{" "}
+              {/* Replace hyphens for readability */}
+              {is_hidden && (
+                <span className='text-xs font-normal italic text-gray-500 ml-2'>
+                  (Hidden Ability)
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
       </div>
 
       {/* Stats Section */}
