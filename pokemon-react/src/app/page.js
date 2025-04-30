@@ -7,7 +7,7 @@ export default async function Page({ searchParams }) {
   let { page } = await searchParams;
   // --- Pagination Logic ---
   page = parseInt(page || "1"); // Get page from URL, default to 1
-  const limit = 20; // Limit Pokémon to 20 per page
+  const limit = 50; // Limit Pokémon to 20 per page
   const offset = (page - 1) * limit; // Calculate offset for API
 
   // --- Fetch Data ---
