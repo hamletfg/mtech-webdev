@@ -22,3 +22,14 @@ const encryptFile = (inputPath, outputPath) => {
     console.log('✅ File encrypted successfully.');
   });
 };
+
+// Decrypt function
+const decryptFile = (inputPath, outputPath) => {
+  const readStream = fs.createReadStream(inputPath);
+  const writeStream = fs.createWriteStream(outputPath);
+  const decipher = crypto.createDecipheriv(algorithm, key, iv);
+  readStream.pipe(decipher).pipe(writeStream);
+  writeStream.on('finish', () => {
+    console.log('✅ File decrypted successfully.');
+  });
+};
