@@ -21,6 +21,21 @@ async function logMessage(message) {
   }
 }
 
+// Function to log messages
+function broadcast(message, senderSocket) {
+  if (clients.size === 0) {
+    console.log('No clients connected to broadcast to.');
+    return; // No clients to broadcast to
+  }
+  console.log(`Broadcasting: ${message}`); // Log broadcasting action
+  for (const [clientId, targetSocket] of clients.entries()) {
+    // Don't send the message back to the original sender (if specified)
+    if (targetSocket !== senderSocket) {
+      targetSocket.write(message);
+    }
+  }
+}
+
 // Create the TCP server
 const server = net.createServer((socket) => {
   // Assign a unique ID to the newly connected client
