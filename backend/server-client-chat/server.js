@@ -11,4 +11,18 @@ const server = net.createServer((socket) => {
   socket.on('end', () => {
     console.log('🔌 Client disconnected.');
   });
+
+  // Handle errors on the connection
+  socket.on('error', (err) => {
+    console.error('Socket Error', err.message);
+  });
+});
+
+// Start listening for connections
+server.listen(PORT, () => {
+  console.log('🚀 Server listening on port ${PORT}');
+});
+
+server.on('error', (err) => {
+  console.error('Server Error:', err.message);
 });
