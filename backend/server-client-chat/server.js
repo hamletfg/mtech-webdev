@@ -37,7 +37,7 @@ function broadcast(message, senderSocket) {
 }
 
 // Create the TCP server
-const server = net.createServer((socket) => {
+const server = net.createServer(async (socket) => {
   // Assign a unique ID to the newly connected client
   clientIdCounter++;
   const clientId = `Client-${clientIdCounter}`;
@@ -47,13 +47,26 @@ const server = net.createServer((socket) => {
   clients.set(clientId, socket);
   socket.clientId = clientId; // Attach the ID to the socket for easy reference
 
+  // Log the connection
+  await logMessage(
+    `${clientId} connected from ${socket.remoteAddress}:${socket.remotePort}`
+  );
+
   // Send a welcome message to the newly connect client
   socket.write(`Welcome to the server, ${clientId}! 🎉\n`);
 
+  // Notify ALL OTHER clients that a new user joined
+  const joinMessage = `🟢 ${clientId} has joined the chat.\n`;
+  broadcast(joinMessage, socket); // Pass the new socket so it doesn't get the message
+
   // Handle client disconnection
-  socket.on('end', () => {
-    console.log('🔌 Client disconnected.');
+  socket.on('end', async () => {
+    const disconnectMsg = '🔌 Client disconnected.';
+    console.log(disconnectMsg);
+    await logMessage(disconnectMsg); // Log disconnection
     clients.delete(socket.clientId); // Remove client on disconnect
+    // Notify remaining clients
+    broadcast(`🔴 ${socket.clientId} has left the chat.\n`, null);
   });
 
   // Handle errors on the connection
