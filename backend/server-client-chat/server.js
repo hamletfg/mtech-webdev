@@ -1,11 +1,25 @@
 import net from 'net';
+import fs from 'fs/promises';
+import path from 'path';
 
 // Define the port we want to listen on
 const PORT = 3000;
+const LOG_FILE = path.join(process.cwd(), 'server.log'); // Define log file path
 
 // Collection to store connected client sockets
 const clients = new Map(); // Use a Map to store clients (Key: clientId, Value: socket)
 let clientIdCounter = 0; // Counter generate unique IDs
+
+// Function to log messages
+async function logMessage(message) {
+  const timestamp = new Date().toISOString();
+  const logEntry = `${timestamp} - ${message}\n`;
+  try {
+    await fs.appendFile(LOG_FILE, logEntry); // Append to the log file
+  } catch (err) {
+    console.error('Error writing to the log file:', err);
+  }
+}
 
 // Create the TCP server
 const server = net.createServer((socket) => {
@@ -24,6 +38,7 @@ const server = net.createServer((socket) => {
   // Handle client disconnection
   socket.on('end', () => {
     console.log('🔌 Client disconnected.');
+    clients.delete(socket.clientId); // Remove client on disconnect
   });
 
   // Handle errors on the connection
