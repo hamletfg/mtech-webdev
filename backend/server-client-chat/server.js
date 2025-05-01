@@ -14,6 +14,13 @@ const server = net.createServer((socket) => {
   const clientId = `Client-${clientIdCounter}`;
   console.log('👋 Client connected!');
 
+  // Store the client socket and assign the ID to the socket object
+  clients.set(clientId, socket);
+  socket.clientId = clientId; // Attach the ID to the socket for easy reference
+
+  // Send a welcome message to the newly connect client
+  socket.write(`Welcome to the server, ${clientId}! 🎉\n`);
+
   // Handle client disconnection
   socket.on('end', () => {
     console.log('🔌 Client disconnected.');
