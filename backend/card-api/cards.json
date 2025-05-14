@@ -1291,6 +1291,17 @@
       "toughness": 2500,
       "rarity": "Common",
       "cost": 3
+    },
+    {
+      "name": "Wind Drake",
+      "set": "Base Set",
+      "cardNumber": 9,
+      "type": "Creature",
+      "power": 2000,
+      "toughness": 1500,
+      "rarity": "Uncommon",
+      "cost": 3,
+      "id": 128
     }
   ]
 }

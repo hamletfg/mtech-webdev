@@ -1,0 +1,13 @@
+POST http://localhost:3000/cards/create
+content-type: application/json
+
+{
+  "name": "Wind Drake",
+  "set": "Base Set",
+  "cardNumber": 9,
+  "type": "Creature",
+  "power": 2000,
+  "toughness": 1500,
+  "rarity": "Uncommon",
+  "cost": 3
+}

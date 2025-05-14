@@ -1,8 +1,22 @@
+// Imports & config
+import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
 import fs from 'fs/promises';
 import express from 'express';
+import { expressjwt } from 'express-jwt';
 
+dotenv.config();
+const JWT_SECRET = process.env.JWT_SECRET;
+const PORT = 3000;
+
+// Express app & global middleware
+const app = express();
+app.use(express.json());
+
+// Public authentication route: issue a token
+
+// Helper functions
 const DATA_FILE = './cards.json';
-
 async function loadCards() {
   const text = await fs.readFile(DATA_FILE, 'utf-8');
   const obj = JSON.parse(text);
@@ -13,10 +27,6 @@ async function saveCards(cards) {
   const newData = JSON.stringify({ cards }, null, 2);
   await fs.writeFile(DATA_FILE, newData, 'utf-8');
 }
-
-const app = express();
-app.use(express.json());
-const PORT = 3000;
 
 // Define a simple route
 app.get('/', (req, res) => {
