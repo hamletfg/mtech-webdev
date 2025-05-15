@@ -14,6 +14,25 @@ const app = express();
 app.use(express.json());
 
 // Public authentication route: issue a token
+app.post('/getToken', async (req, res, next) => {
+  try {
+    const { username, password } = req.body;
+    const userData = JSON.parse(await fs.readFile('./users.json', 'utf-8'));
+    const user = usersData.users.find(
+      (u) => u.username === username && u.password === password
+    );
+    if (!user) {
+      return res.status(401).json({ errorMessage: 'Invalid credentials' });
+    }
+    const token = jwt.sign({ username }, JWT_SECRET, {
+      algorithm: 'HS256',
+      expiresIn: '10s',
+    });
+    res.json({ token });
+  } catch (err) {
+    next(err);
+  }
+});
 
 // Helper functions
 const DATA_FILE = './cards.json';
