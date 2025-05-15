@@ -18,7 +18,7 @@ app.post('/getToken', async (req, res, next) => {
   try {
     const { username, password } = req.body;
     const userData = JSON.parse(await fs.readFile('./users.json', 'utf-8'));
-    const user = usersData.users.find(
+    const user = userData.users.find(
       (u) => u.username === username && u.password === password
     );
     if (!user) {
@@ -38,16 +38,16 @@ app.post('/getToken', async (req, res, next) => {
 const DATA_FILE = './cards.json';
 async function loadCards() {
   const text = await fs.readFile(DATA_FILE, 'utf-8');
-  const obj = JSON.parse(text).cards;
+  const obj = JSON.parse(text);
+  return obj.cards;
 }
-
 async function saveCards(cards) {
   const newData = JSON.stringify({ cards }, null, 2);
   await fs.writeFile(DATA_FILE, newData, 'utf-8');
 }
 
-// Public Cards Route
-app.get('cards', async (req, res, next) => {
+// Public cards route
+app.get('/cards', async (req, res, next) => {
   try {
     let cards = await loadCards();
     for (const [key, val] of Object.entries(req.query)) {
@@ -59,50 +59,16 @@ app.get('cards', async (req, res, next) => {
   }
 });
 
-// Create endpoint to add a new card
-app.post('/cards/create', async (req, res, next) => {
-  try {
-    // Load existing cards
-    const cards = await loadCards();
-
-    // Extract new card data from body
-    const newCard = req.body;
-
-    // Basic validation
-    const requiredFields = [
-      'name',
-      'set',
-      'cardNumber',
-      'type',
-      'rarity',
-      'cost',
-    ];
-    for (const field of requiredFields) {
-      if (!newCard[field]) {
-        return res
-          .status(400)
-          .json({ errorMessage: `Missing required field: ${field}` });
-      }
-    }
-
-    // Generate unique ID
-    const maxId = cards.reduce((max, card) => Math.max(max, card.id), 0);
-    newCard.id = maxId + 1;
-
-    // Add to array
-    cards.push(newCard);
-
-    // Persist updated cards
-    await saveCards(cards);
-
-    // Respond with success
-    res
-      .status(201)
-      .json({ successMessage: 'Card created successfully', card: newCard });
-  } catch (err) {
-    next(err);
-  }
+// JWT-Protection middleware
+const authenticate = expressjwt({
+  secret: JWT_SECRET,
+  algorithms: ['HS256'],
 });
+
+// Protected create/update/delete routes
+app.post('/cards/create', authenticate, async (req, res, next) => {});
+app.put('/cards/:id', authenticate, async (req, res, next) => {});
+app.delete('/cards/:id', authenticate, async (req, res, next) => {});
 
 // Start the server
 app.listen(PORT, () => {
