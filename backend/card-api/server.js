@@ -38,8 +38,7 @@ app.post('/getToken', async (req, res, next) => {
 const DATA_FILE = './cards.json';
 async function loadCards() {
   const text = await fs.readFile(DATA_FILE, 'utf-8');
-  const obj = JSON.parse(text);
-  return obj.cards; // return the array of cards
+  const obj = JSON.parse(text).cards;
 }
 
 async function saveCards(cards) {
@@ -47,10 +46,7 @@ async function saveCards(cards) {
   await fs.writeFile(DATA_FILE, newData, 'utf-8');
 }
 
-// Define a simple route
-app.get('/', (req, res) => {
-  res.send('Hello, Card API! 🃏');
-});
+// Public Cards Route
 
 // Create endpoint to add a new card
 app.post('/cards/create', async (req, res, next) => {
