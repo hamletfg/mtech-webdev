@@ -47,6 +47,17 @@ async function saveCards(cards) {
 }
 
 // Public Cards Route
+app.get('cards', async (req, res, next) => {
+  try {
+    let cards = await loadCards();
+    for (const [key, val] of Object.entries(req.query)) {
+      cards = cards.filter((c) => String(c[key]) === val);
+    }
+    res.json({ cards });
+  } catch (err) {
+    next(err);
+  }
+});
 
 // Create endpoint to add a new card
 app.post('/cards/create', async (req, res, next) => {
