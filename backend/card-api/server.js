@@ -97,7 +97,28 @@ app.post('/cards/create', authenticate, async (req, res, next) => {
   }
 });
 
-app.put('/cards/:id', authenticate, async (req, res, next) => {});
+app.put('/cards/:id', authenticate, async (req, res, next) => {
+  try {
+    const cards = await loadCards();
+    const id = Number(req.params.id);
+    const idx = cards.findIndex((c) => c.id === id);
+    if (idx === -1) {
+      return res.status(404).json({ errorMessage: 'Card not found' });
+    }
+
+    // Merge updates, but preserve id
+    cards[idx] = { ...cards[idx], ...req.body, id };
+    await saveCards(cards);
+
+    res.json({
+      successMessage: 'Card updated successfully',
+      card: cards[idx],
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.delete('/cards/:id', authenticate, async (req, res, next) => {});
 
 // Start the server
