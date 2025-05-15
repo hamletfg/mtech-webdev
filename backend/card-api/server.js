@@ -66,7 +66,37 @@ const authenticate = expressjwt({
 });
 
 // Protected create/update/delete routes
-app.post('/cards/create', authenticate, async (req, res, next) => {});
+app.post('/cards/create', authenticate, async (req, res, next) => {
+  try {
+    const cards = await loadCards();
+    const newCard = req.body;
+
+    //Basic validation
+    const required = ['name', 'set', 'cardNumber', 'type', 'rarity', 'cost'];
+    for (const f of required) {
+      if (!newCard[f]) {
+        return res
+          .status(400)
+          .json({ errorMessage: `Missing required field: ${f}` });
+      }
+    }
+
+    // Unique ID
+    const maxId = cards.reduce((m, c) => Math.max(m, c.id), 0);
+    newCard.id = maxId + 1;
+
+    cards.push(newCard);
+    await saveCards(cards);
+
+    res.status(201).json({
+      successMessage: 'Card created successfully',
+      card: newCard,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.put('/cards/:id', authenticate, async (req, res, next) => {});
 app.delete('/cards/:id', authenticate, async (req, res, next) => {});
 
