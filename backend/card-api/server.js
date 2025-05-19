@@ -119,7 +119,26 @@ app.put('/cards/:id', authenticate, async (req, res, next) => {
   }
 });
 
-app.delete('/cards/:id', authenticate, async (req, res, next) => {});
+app.delete('/cards/:id', authenticate, async (req, res, next) => {
+  try {
+    const cards = await loadCards();
+    const id = Number(req.params.id);
+    const idx = cards.findIndex((c) => c.id === id);
+    if (idx === -1) {
+      return res.status(404).json({ errorMessage: 'Card not found' });
+    }
+
+    const [removed] = cards.splice(idx, 1);
+    await saveCards(cards);
+
+    res.json({
+      successMessage: 'Card deleted succesfully',
+      card: removed,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
 
 // Start the server
 app.listen(PORT, () => {
