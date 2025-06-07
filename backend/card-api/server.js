@@ -140,6 +140,21 @@ app.delete('/cards/:id', authenticate, async (req, res, next) => {
   }
 });
 
+app.use((err, req, res, next) => {
+  console.error('An error occured:', err.stack || err); // Log the full error stack
+
+  // Check if the error is from express-jwt (for unauthorized)
+  if (err.name === 'UnauthorizedError') {
+    return res.status(401).json({ errorMessage: 'Invalid or missing token' });
+  }
+
+  // For other errors, determine status and message
+  const status = err.status || err.statusCode || 500;
+  const message = err.message || 'Internal Server Error';
+
+  res.status(status).json({ errorMessage: message });
+});
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server listening at http://localhost:${PORT}`);
