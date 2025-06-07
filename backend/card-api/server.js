@@ -141,7 +141,7 @@ app.delete('/cards/:id', authenticate, async (req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  console.error('An error occured:', err.stack || err); // Log the full error stack
+  console.error('An error occurred:', err.stack || err); // Log the full error stack
 
   // Check if the error is from express-jwt (for unauthorized)
   if (err.name === 'UnauthorizedError') {

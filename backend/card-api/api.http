@@ -1,0 +1,14 @@
+### Get JWT Token
+# @name getToken
+POST http://localhost:3000/getToken
+Content-Type: application/json
+
+{
+  "username": "alice",
+  "password": "wonderland"
+}
+
+### Store the token for subsequent requests
+@jwt_token = {{getToken.response.body.token}}
+
+###
