@@ -26,7 +26,7 @@ app.post('/getToken', async (req, res, next) => {
     }
     const token = jwt.sign({ username }, JWT_SECRET, {
       algorithm: 'HS256',
-      expiresIn: '10s',
+      expiresIn: '10m',
     });
     res.json({ token });
   } catch (err) {

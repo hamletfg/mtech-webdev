@@ -11,4 +11,20 @@ Content-Type: application/json
 ### Store the token for subsequent requests
 @jwt_token = {{getToken.response.body.token}}
 
+### Get all cards (to find an ID and see the current state)
+GET http://localhost:3000/cards
+Authorization: Bearer {{jwt_token}}
+
+### Update an Existing Card (Successful Case)
+PUT http://localhost:3000/cards/2
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+
+{
+  "name": "Super Awesome Updated Card Name",
+  "cost": 10,
+  "description": "This card is now even better!"
+}
+
 ###

@@ -13,14 +13,15 @@
     },
     {
       "id": 2,
-      "name": "Frost Giant",
+      "name": "Super Awesome Updated Card Name",
       "set": "Base Set",
       "cardNumber": 2,
       "type": "Creature",
       "power": 4000,
       "toughness": 3500,
       "rarity": "Uncommon",
-      "cost": 4
+      "cost": 10,
+      "description": "This card is now even better!"
     },
     {
       "id": 3,
