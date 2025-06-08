@@ -56,3 +56,18 @@ Authorization: Bearer {{jwt_token}}
 
 ### Test DELETE - Unauthorized (No Token)
 DELETE http://localhost:3000/cards/2
+
+### Test Multiple Filters (Set = "Base Set", Type = "Creature", Rarity = "Common"
+GET http://localhost:3000/cards?set=Base%20Set&type=Creature&rarity=Common
+
+### Test Single Filter
+GET http://localhost:3000/cards?type=Spell
+
+### Test Different Filter Combination
+GET http://localhost:3000/cards?rarity=Rare&cost=2
+
+### Test Filter with No Results
+GET http://localhost:3000/cards?set=NonExistentSet
+
+### Test Case-Sensitive Filtering
+GET http://localhost:3000/cards?type=CREATURE
