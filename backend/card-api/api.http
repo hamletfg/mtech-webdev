@@ -27,4 +27,32 @@ Content-Type: application/json
   "description": "This card is now even better!"
 }
 
-###
+### Test PUT - Card Not Found (404)
+PUT http://localhost:3000/cards/9999
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/application/json
+
+{
+  "name": "This Card Doesn't Exist",
+  "cost": 5
+}
+
+### Test PUT - Unauthorized (No Token)
+PUT http://localhost:3000/cards/1
+Content-Type: application/json
+
+{
+  "name": "Unauthorized Update Attempt",
+  "cost": 5
+}
+
+### Test DELETE - Success
+DELETE http://localhost:3000/cards/1
+Authorization: Bearer {{jwt_token}}
+
+### Test DELETE - Card Not Found (404)
+DELETE http://localhost:3000/cards/9999
+Authorization: Bearer {{jwt_token}}
+
+### Test DELETE - Unauthorized (No Token)
+DELETE http://localhost:3000/cards/2

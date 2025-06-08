@@ -1,17 +1,6 @@
 {
   "cards": [
     {
-      "id": 1,
-      "name": "Fireball Magus",
-      "set": "Base Set",
-      "cardNumber": 1,
-      "type": "Creature",
-      "power": 3000,
-      "toughness": 2500,
-      "rarity": "Common",
-      "cost": 4
-    },
-    {
       "id": 2,
       "name": "Super Awesome Updated Card Name",
       "set": "Base Set",
