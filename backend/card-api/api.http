@@ -71,3 +71,6 @@ GET http://localhost:3000/cards?set=NonExistentSet
 
 ### Test Case-Sensitive Filtering
 GET http://localhost:3000/cards?type=CREATURE
+
+### Get All Sets
+GET http://localhost:3000/sets

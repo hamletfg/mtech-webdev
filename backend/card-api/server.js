@@ -59,6 +59,22 @@ app.get('/cards', async (req, res, next) => {
   }
 });
 
+// // Route to get sets
+app.get('/sets', async (req, res, next) => {
+  try {
+    // 1. Load all cards
+    const cards = await loadCards();
+
+    // 2. Extract unique sets using Set
+    const uniqueSets = [...new Set(cards.map((card) => card.set))];
+
+    // 3. Return the sets array
+    res.json({ sets: uniqueSets });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // JWT-Protection middleware
 const authenticate = expressjwt({
   secret: JWT_SECRET,
