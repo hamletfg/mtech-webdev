@@ -59,7 +59,7 @@ app.get('/cards', async (req, res, next) => {
   }
 });
 
-// // Route to get sets
+// Route to get sets
 app.get('/sets', async (req, res, next) => {
   try {
     // 1. Load all cards
@@ -70,6 +70,58 @@ app.get('/sets', async (req, res, next) => {
 
     // 3. Return the sets array
     res.json({ sets: uniqueSets });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Route to get types
+app.get('/types', async (req, res, next) => {
+  try {
+    const cards = await loadCards();
+    const uniqueTypes = [...new Set(cards.map((card) => card.type))];
+    res.json({ types: uniqueTypes });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Route to get rarities
+app.get('/rarities', async (req, res, next) => {
+  try {
+    const cards = await loadCards();
+    const uniqueRarities = [...new Set(cards.map((card) => card.rarity))];
+    res.json({ rarities: uniqueRarities });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Route to get card count
+app.get('/cards/count', async (req, res, next) => {
+  try {
+    const cards = await loadCards();
+    res.json({
+      count: cards.length,
+      message: `Total number of cards: ${cards.length}`,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Route to get a random card
+app.get('/cards/random', async (req, res, next) => {
+  try {
+    const cards = await loadCards();
+    // Get a random index between 0 and cards.length -1
+    const randomIndex = Math.floor(Math.random() * cards.length);
+    const randomCard = cards[randomIndex];
+
+    res.json({
+      message: 'Random card selected!',
+      card: randomCard,
+    });
   } catch (err) {
     next(err);
   }

@@ -74,3 +74,15 @@ GET http://localhost:3000/cards?type=CREATURE
 
 ### Get All Sets
 GET http://localhost:3000/sets
+
+### Get All Card Types
+GET http://localhost:3000/types
+
+### Get All Card Rarities
+GET http://localhost:3000/rarities
+
+### Get Total Card Count
+GET http://localhost:3000/cards/count
+
+### Get Random Card
+GET http://localhost:3000/cards/random
